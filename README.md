@@ -53,20 +53,21 @@ I will use a combination of machine-learning-model-based insights and hypothesis
 ### EDA Summary of Extracted Data
 
 ### Years Extracted (thus far)
-<img src="images/EDA_year_counts.png"  width=60%>
+
+<img src="Images/EDA_year_counts.png"  width=60%>
      
 ### MPAA Rating Counts
-<img src="images/EDA_certification_counts.png"  width=60%>
+<img src="Images/EDA_certification_counts.png"  width=60%>
 ### MPAA Rating Revenue Comparison
-<img src="images/EDA_avg_revenue_certification.png"  width=60%>
+<img src="Images/EDA_avg_revenue_certification.png"  width=60%>
 
 
 ### MPAA Rating - Average Budget Comparison
-<img src="images/EDA_avg_budget_certification.png"  width=60%>  
+<img src="Images/EDA_avg_budget_certification.png"  width=60%>  
 
 
 ### MPAA Rating - Average ROI Comparison
-<img src="images/EDA_avg_roi_certification.png"  width=60%>
+<img src="Images/EDA_avg_roi_certification.png"  width=60%>
         
        
 
