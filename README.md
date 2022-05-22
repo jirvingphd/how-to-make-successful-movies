@@ -54,7 +54,7 @@ I will use a combination of machine-learning-model-based insights and hypothesis
 
 ### Years Extracted (thus far)
 
-<img src="Images/EDA_year_counts.png"  width=60%>
+<img src="Images/EDA_year_counts.png"  width=90%>
      
 ### MPAA Rating Counts
 <img src="Images/EDA_certification_counts.png"  width=60%>
