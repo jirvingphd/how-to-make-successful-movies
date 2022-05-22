@@ -1,26 +1,3 @@
-```python
-import glob
-images = glob.glob('images/EDA*')
-
-image_links = []
-for img in images:
-    link = f'<img src="{img}" width=60%>'
-    image_links.append(link)
-
-print('\n'.join(image_links))
-```
-
-
-
-
-    ['images/EDA_year_counts.png',
-     'images/EDA_certification_counts.png',
-     'images/EDA_avg_revenue_certification.png',
-     'images/EDA_avg_roi_certification.png',
-     'images/EDA_avg_budget_certification.png']
-
-
-
 # How to Make a Successful Movie
 
 - James M. Irving
