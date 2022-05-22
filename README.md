@@ -6,17 +6,19 @@
 
 ## Business Problem
 
-I have been hired to produce analyze IMDB's extensive publicly-available dataset, supplement it with financial data from TMDB's API, convert the raw data into a MySQL database, and then use that database for extracting insights and recommendations on how to make a successful movie.
 
-I will use a combination of machine-learning-model-based insights and hypothesis testing to extract insights for our stakeholder.
-    
+I have been hired to process and analyze IMDB's extensive publicly-available dataset, supplement it with financial data from TMDB's API, convert the raw data into a MySQL database, and then use that database for extracting insights and recommendations on how to make a successful movie.
+
+I will use a combination of machine-learning-model-based insights and hypothesis testing to extract insights for our stakeholders.
+
 
   
 ### Specifications/Constraints    
-- The stakeholder wants to focus on attributes of the movies themselves, vs the actors and directors connected to those movies. 
+- The stakeholder wants to focus on attributes of the movies themselves vs. the actors and directors connected to those movies. 
 - They only want to include information related to movies released in the United States.
 - They also did not want to include movies released before the year 2000.
-- The stakeholder is particularly interested in how the MPAA rating, genre(s), runtime, budget, and production companies influence movie revenue and user-ratings.
+- The stakeholder is particularly interested in how the MPAA rating, genre(s), runtime, budget, and production companies influence movie revenue and user ratings.
+
 
 ## `Part 1- Initial IMDB Data Processing.ipynb`
 
@@ -53,21 +55,20 @@ I will use a combination of machine-learning-model-based insights and hypothesis
 ### EDA Summary of Extracted Data
 
 ### Years Extracted (thus far)
-
-<img src="Images/EDA_year_counts.png"  width=90%>
+<img src="images/EDA_year_counts.png"  width=60%>
      
 ### MPAA Rating Counts
-<img src="Images/EDA_certification_counts.png"  width=60%>
+<img src="images/EDA_certification_counts.png"  width=60%>
 ### MPAA Rating Revenue Comparison
-<img src="Images/EDA_avg_revenue_certification.png"  width=60%>
+<img src="images/EDA_avg_revenue_certification.png"  width=60%>
 
 
 ### MPAA Rating - Average Budget Comparison
-<img src="Images/EDA_avg_budget_certification.png"  width=60%>  
+<img src="images/EDA_avg_budget_certification.png"  width=60%>  
 
 
 ### MPAA Rating - Average ROI Comparison
-<img src="Images/EDA_avg_roi_certification.png"  width=60%>
+<img src="images/EDA_avg_roi_certification.png"  width=60%>
         
        
 
@@ -83,7 +84,7 @@ I will use a combination of machine-learning-model-based insights and hypothesis
 
 ### ERD
 <img src="SQL/ERD_movies.png">
-        
+    
 
 ## `Part 4 - Hypothesis Testing` - WIP
 
@@ -126,6 +127,28 @@ I will use a combination of machine-learning-model-based insights and hypothesis
     - A post-hoc determined that movies rated R made significantly less than all other raings.
 
 <img src="Images/hypothesis_revnue_mpaa_rating.png" width=400px>
+
+### Future Work: Planned Hypotheses to Test
+
+
+- [x] Q1: Does the MPAA rating of a movie (G/PG/PG-13/R) affect how much revenue the movie generates? If so, which rating earns the most revenue?
+
+
+- Q1B: What if compare ROI instead of revenue?
+
+
+- Q2; Do movies that are over 2.5 hours long earn more revenue than movies that are 1.5 hours long (or less)?
+
+
+
+- Q3: Do movies released in 2020 earn less revenue than movies released in 2018?
+
+
+
+- Q4: Do some movie genres earn more revenue than others?
+
+
+- Q5: Are some genres more highly rated than others?
 
 ## `Part 5 - Regression Model-Based Insights` - WIP
 
@@ -239,5 +262,9 @@ strong multicollinearity problems or that the design matrix is singular.
 ### Random Forest - Built-in Feature Importance
 <img src="Images/rf_importance.png" width=60%>
 
+### Permutation Importance
+<img src="Images/permutation_importance.png" width=60%>
+
 ### Summary
 - Coming soon!
+
