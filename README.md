@@ -98,7 +98,14 @@ I will use a combination of machine-learning-model-based insights and hypothesis
 - I will then normalize all IMDB movie data into a proper MySQL database.
     - MVP Version (included): Local Server Installation with Publicly-Available .sql file for recreationl.
     - AAB Version (future work): AWS-hosted RDS MySQL database. 
+- See `SQL` folder for:
+    - `movies.sql`: exported SQL DB
+    - `movies_project.mwb`: model used for ERD
     
+
+### ERD
+<img src="SQL/ERD_movies.png">
+        
 
 ## `Part 4 - Hypothesis Testing` - WIP
 
