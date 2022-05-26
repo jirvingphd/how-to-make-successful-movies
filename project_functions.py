@@ -1,5 +1,6 @@
 def annotate_bars(ax,fmt='.2f',size=15,xytext=(0,8),ha='center', va='center',
-                  convert_millions=False, despine=False, spines = ['right','top']):
+                  convert_millions=False, despine=False, spines = ['right','top'],
+				  use_errorbars=False):
 	"""Annotates bar values above each bar
 	Adapted from: https://www.geeksforgeeks.org/how-to-annotate-bars-in-barplot-with-matplotlib-in-python/
 
@@ -12,32 +13,75 @@ def annotate_bars(ax,fmt='.2f',size=15,xytext=(0,8),ha='center', va='center',
 		va (str): vertical alignment. Default is 'center'
 		convert_millions(bool): Determines if values are calculated as Millions
 	"""
-
+	import numpy as np
+	if use_errorbars==True:
+		err_height= get_line_data(ax,just_error_heights=True)
+		patches_errors = list(zip(ax.patches,err_height))
+		
+	else:
+		patches_errors = [(patch,None) for patch in ax.patches]
 	# Iterrating over the bars one-by-one
-	for bar in ax.patches:
+	
+	for bar, err in patches_errors:#ax.patches:
 		# Using Matplotlib's annotate function and
 		# passing the coordinates where the annotation shall be done
 		# x-coordinate: bar.get_x() + bar.get_width() / 2
 		# y-coordinate: bar.get_height()
 		# free space to be left to make graph pleasing: (0, 8)
 		# ha and va stand for the horizontal and vertical alignment
-		if convert_millions==False:
-			value = format(bar.get_height(),fmt )
+		
+		if use_errorbars==False:
+			if convert_millions==False:
+				height = bar.get_height()
+				value = format(height,fmt )
+				
+			else:
+				height = bar.get_height()
+				value = format(height/1_000_000,fmt)+ "M"
 		else:
-			raw_value = bar.get_height()/1_000_000
-			value = format(raw_value,fmt)+ "M"
+			if convert_millions==False:
+				height = err
+				value = format(err,fmt )
+			else:
+				height = err#/1_000_000
+				value = format(height/1_000_000,fmt)+ "M"						
+
+		
 		ax.annotate(value,
 						(bar.get_x() + bar.get_width() / 2,
-						bar.get_height()), 
+						height),#bar.get_height()), 
 					ha=ha, va=va,
 						size=size, xytext=xytext,
 						textcoords='offset points')
+					
+
+		
 	if despine:
 		## removing top and right border
 		for side in spines:
 			ax.spines[side].set_visible(False)
 	return ax
 
+
+def get_line_data(ax,just_error_heights=False):
+	"""Adapted From Source: https://stackoverflow.com/a/46271417"""
+	import numpy as np
+	x_list = []
+	lower_list = []
+	upper_list = []
+	for line in ax.lines:
+		x_list.append(line.get_xdata()[0])
+		lower_list.append(line.get_ydata()[0])
+		upper_list.append(line.get_ydata()[1])
+		
+	y = 0.5 * (np.asarray(lower_list) + np.asarray(upper_list))
+	y_error = np.asarray(upper_list) - y
+	x = np.asarray(x_list)
+
+	if just_error_heights==False:
+		return x, y, y_error
+	else: 
+		return upper_list
 
         
 def savefig(fname,fig=None, ax=None,dpi=300,bbox_inches='tight',
@@ -99,21 +143,30 @@ def write_json(new_data, filename, return_data=False):
 
 
 
-def millions(x,pos):
+def millions(x,pos,prefix='$', suffix=None,float_fmt=","):
     """function for use wth matplotlib FuncFormatter -  formats money in millions"""
-    return f"${x*1e-6:,}M"
+    x = x*1e-6
+    if suffix is None:
+        suffix="M"
+    string = "{prefix}{x:"+float_fmt+"}{suffix}"
+    return string.format(prefix=prefix,x=x, suffix=suffix)
 
 # Create the formatter
 # price_fmt_mill =FuncFormatter(millions)
 # ## Set the axis' major formatter
 # ax.yaxis.set_major_formatter(price_fmt_mill)
 
-def billions(x,pos):
-    """function for use wth matplotlib FuncFormatter -  formats money in billions"""
-    return f"$ {x*1e-9:,}B"
+def billions(x,pos,prefix='$', suffix=None, float_fmt=','):
+	"""function for use wth matplotlib FuncFormatter -  formats money in billions"""
+	x = x*1e-9
+	if suffix is None:
+		suffix='B'
+	string = "{prefix}{x:"+float_fmt+"}{suffix}"
+	return string.format(prefix=prefix,x=x, suffix=suffix)
+	# return f"{prefix}{x*1e-9:,}{suffix}"
 
 
-def get_funcformatter(kind='m'):
+def get_funcformatter(kind='m',prefix='$',suffix=None, float_fmt=','):
 	"""Returns a matplotlib FuncFormatter for formatting currecny in millions or billions
 
 	Args:
@@ -128,9 +181,9 @@ def get_funcformatter(kind='m'):
 	from matplotlib.ticker import FuncFormatter
 
 	if kind.lower()=='m':
-		func = millions
+		func = lambda x,pos: millions(x,pos,prefix=prefix,suffix=suffix, float_fmt=float_fmt)
 	elif kind.lower()=='b':
-		func = billions
+		func = lambda x, pos: billions(x,pos,prefix=prefix,suffix=suffix, float_fmt=float_fmt)
 	return FuncFormatter(func)
 	
 	
