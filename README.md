@@ -55,20 +55,20 @@ I will use a combination of machine-learning-model-based insights and hypothesis
 ### EDA Summary of Extracted Data
 
 ### Years Extracted (thus far)
-<img src="images/EDA_year_counts.png"  width=60%>
+<img src="./Images/EDA_year_counts.png"  width=60%>
      
 ### MPAA Rating Counts
-<img src="images/EDA_certification_counts.png"  width=60%>
+<img src="./Images/EDA_certification_counts.png"  width=60%>
 ### MPAA Rating Revenue Comparison
-<img src="images/EDA_avg_revenue_certification.png"  width=60%>
+<img src="./Images/EDA_avg_revenue_certification.png"  width=60%>
 
 
 ### MPAA Rating - Average Budget Comparison
-<img src="images/EDA_avg_budget_certification.png"  width=60%>  
+<img src="./Images/EDA_avg_budget_certification.png"  width=60%>  
 
 
 ### MPAA Rating - Average ROI Comparison
-<img src="images/EDA_avg_roi_certification.png"  width=60%>
+<img src="./Images/EDA_avg_roi_certification.png"  width=60%>
         
        
 
@@ -126,7 +126,7 @@ I will use a combination of machine-learning-model-based insights and hypothesis
     - There is a significant difference in the average revenue for different movie certifications.
     - A post-hoc determined that movies rated R made significantly less than all other raings.
 
-<img src="Images/hypothesis_revnue_mpaa_rating.png" width=400px>
+<img src="./Images/hypothesis_revnue_mpaa_rating.png" width=400px>
 
 ### Future Work: Planned Hypotheses to Test
 
@@ -253,7 +253,7 @@ strong multicollinearity problems or that the design matrix is singular.
 
 <img src="Images/OLS_best_linear_reg.png">
 
-## Model Coefiicents and Importances
+## Regression Model Coefiicents and Importances
 
 ### OLS Coefficients
 
@@ -264,6 +264,20 @@ strong multicollinearity problems or that the design matrix is singular.
 
 ### Permutation Importance
 <img src="Images/permutation_importance.png" width=60%>
+
+
+## `Part 6 - Classification Model-Based Insights` - WIP
+
+
+### Random Forest Classifier - BuiltIn Feature  Importances
+<img src="./Images/rf_clf_importance.png">
+
+### Random Forest Classifier -  Permutation Improtances
+
+<img src="./Images/clf_permutation_importance.png">
+
+### Random Forest - SHAP Summary Plot
+<img src="./Images/rf_shap_summary.png">
 
 ### Summary
 - Coming soon!
