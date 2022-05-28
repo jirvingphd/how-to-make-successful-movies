@@ -44,12 +44,8 @@ I will use a combination of machine-learning-model-based insights and hypothesis
 <img src="./Images/tmdb_logo_blue_long.svg" width=400px>
         
  
->"This product uses the TMDB API but is not endorsed or certified by TMDB." 
+>"This product uses the TMDB API but is not endorsed or certified by TMDB."
        
-
-
-
-
 
         
 ### EDA Summary of Extracted Data
