@@ -54,9 +54,12 @@ I will use a combination of machine-learning-model-based insights and hypothesis
 <img src="./Images/EDA_year_counts.png"  width=60%>
      
 ### MPAA Rating Counts
+
 <img src="./Images/EDA_certification_counts.png"  width=60%>
+
 ### MPAA Rating Revenue Comparison
-<img src="./Images/EDA_avg_revenue_certification.png"  width=60%>
+
+<img src="Images/EDA_avg_revenue_by_certification.png"  width=60%>
 
 
 ### MPAA Rating - Average Budget Comparison
