@@ -2,16 +2,11 @@
 
 - James M. Irving, Ph.D.
 
-
-- www.linkedin.com/in/james-irving-phd
-
 <ul>
-<li><a href="https://github.com/coding-dojo-data-science/aml-v23-streamlit-ames">Project Repo</a></li>
-
-  <li><a href="https://www.linkedin.com/[removed]" rel="nofollow noreferrer">
+  <li><a href="https://www.linkedin.com/in/james-irving-phd" rel="nofollow noreferrer">
     <img src="https://i.stack.imgur.com/gVE0j.png" alt="linkedin"> LinkedIn
   </a> </li>
-  <li><a href="https://github.com/coding-dojo-data-science" rel="nofollow noreferrer">
+  <li><a href="https://github.com/jirvingphd" rel="nofollow noreferrer">
     <img src="https://i.stack.imgur.com/tskMh.png" alt="github"> Github
   </a></li>
 </ul>
