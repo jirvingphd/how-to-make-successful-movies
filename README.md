@@ -14,6 +14,10 @@
 
 <img src="Images/movies-generic-header.png" width=300px>
 
+<hr>
+
+[Click here for the Companion Tableau Dashboard](https://public.tableau.com/views/MovieDashboard-02-14-23Lecture/Home?:language=en-US&:display_count=n&:origin=viz_share_link)
+
 ## Business Problem
 
 
