@@ -1,6 +1,21 @@
 # How to Make a Successful Movie
 
-- James M. Irving
+- James M. Irving, Ph.D.
+
+
+- www.linkedin.com/in/james-irving-phd
+
+<ul>
+<li><a href="https://github.com/coding-dojo-data-science/aml-v23-streamlit-ames">Project Repo</a></li>
+
+  <li><a href="https://www.linkedin.com/[removed]" rel="nofollow noreferrer">
+    <img src="https://i.stack.imgur.com/gVE0j.png" alt="linkedin"> LinkedIn
+  </a> </li>
+  <li><a href="https://github.com/coding-dojo-data-science" rel="nofollow noreferrer">
+    <img src="https://i.stack.imgur.com/tskMh.png" alt="github"> Github
+  </a></li>
+</ul>
+
 
 <img src="Images/movies-generic-header.png" width=300px>
 
@@ -279,5 +294,24 @@ strong multicollinearity problems or that the design matrix is singular.
 <img src="./Images/rf_shap_summary.png">
 
 ### Summary
-- Coming soon!
+
+In this project, I have processed, analyzed, and modeled a large dataset of movie data from IMDB and TMDB. I identified several statistically significant relationships between movie attributes and both revenue and user ratings.
+
+
+Here are some of the key insights gained from this analysis:
+
+* MPAA rating significantly impacts movie revenue. R-rated movies tend to generate less revenue than G, PG, or PG-13 rated movies.
+* Movie runtime also significantly impacts revenue. Movies over 2.5 hours tend to generate more revenue than shorter movies.
+* Movie budget is a significant predictor of revenue, but the relationship is not linear. Movies with budgets between \$50 million and \$150 million tend to generate the most revenue.
+* Movie release month and day have a small but statistically significant impact on revenue. Summer-released movies tend to generate more revenue than movies released in other seasons.
+* Production companies involved in making a movie can also significantly impact revenue. Movies produced by certain companies, such as DreamWorks Animation and Pixar, tend to generate more revenue than movies produced by other companies.
+
+These insights can be used by movie studios and distributors to make informed decisions about how to produce and market their movies. For example, studios may want to focus on producing R-rated movies that are shorter, have larger budgets, and are released in the summer. Studios may also want to partner with production companies that have a proven track record of success.
+
+
+In addition to these insights, I have also developed a regression model that can be used to predict the revenue of a movie based on its attributes. This model can be used by studios and distributors to estimate the potential revenue of a movie before it is released.
+
+
+Overall, this project has shown that there is a wealth of information that can be extracted from movie data. This information can be used to make informed decisions about how to make and market movies, and to predict the success of movies before they are released.
+
 
