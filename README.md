@@ -12,11 +12,8 @@
 </ul>
 
 
-<img src="Images/movies-generic-header.png" width=300px>
+<center><img src="Images/movies-generic-header.png" width=200px></center>
 
-<hr>
-
-[Click here for the Companion Tableau Dashboard](https://public.tableau.com/views/MovieDashboard-02-14-23Lecture/Home?:language=en-US&:display_count=n&:origin=viz_share_link)
 
 ## Business Problem
 
@@ -26,6 +23,11 @@ I have been hired to process and analyze IMDB's extensive publicly-available dat
 I will use a combination of machine-learning-model-based insights and hypothesis testing to extract insights for our stakeholders.
 
 
+<hr>
+
+[Click here for the Companion Tableau Dashboard](https://public.tableau.com/views/HowtoMakeaSuccessfulMovie/Home?:language=en-US&:display_count=n&:origin=viz_share_link)
+
+<center><a href="https://public.tableau.com/views/HowtoMakeaSuccessfulMovie/Home?:language=en-US&:display_count=n&:origin=viz_share_link"><img src="Images/tableau-dash-preview.png" width=600></a></center>
   
 ### Specifications/Constraints    
 - The stakeholder wants to focus on attributes of the movies themselves vs. the actors and directors connected to those movies. 
