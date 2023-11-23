@@ -112,35 +112,79 @@ def savefig(fname,fig=None, ax=None,dpi=300,bbox_inches='tight',
 
 
 
-def write_json(new_data, filename, return_data=False): 
-	"""Appends the input json-compatible data to the json file.
-	Adapted from: https://www.geeksforgeeks.org/append-to-json-file-using-python/
+# def write_json(new_data, filename, return_data=False): 
+# 	"""Appends the input json-compatible data to the json file.
+# 	Adapted from: https://www.geeksforgeeks.org/append-to-json-file-using-python/
 
-	Args:
-		new_data (list or dict): json-compatible dictionary or list
-		filename (str): json file to append data to
+# 	Args:
+# 		new_data (list or dict): json-compatible dictionary or list
+# 		filename (str): json file to append data to
 		
-	Returns:
-		return_data(bool): determines if combined data is returned (default =False) 
-	"""
-	import json
-	with open(filename,'r+') as file:
-		# First we load existing data into a dict.
-		file_data = json.load(file)
-		## Choose extend or append
-		if (type(new_data) == list) & (type(file_data) == list):
-			file_data.extend(new_data)
-		else:
-				file_data.append(new_data)
-		# Sets file's current position at offset.
-		file.seek(0)
-		# convert back to json.
-		json.dump(file_data, file)
+# 	Returns:
+# 		return_data(bool): determines if combined data is returned (default =False) 
+# 	"""
+# 	import json
+# 	with open(filename,'r+') as file:
+# 		# First we load existing data into a dict.
+# 		file_data = json.load(file)
+# 		## Choose extend or append
+# 		if (type(new_data) == list) & (type(file_data) == list):
+# 			file_data.extend(new_data)
+# 		else:
+# 				file_data.append(new_data)
+# 		# Sets file's current position at offset.
+# 		file.seek(0)
+# 		# convert back to json.
+# 		json.dump(file_data, file)
 		
-	if return_data:
-		return file_data
+# 	if return_data:
+# 		return file_data
 
 
+
+def write_json(new_data, filename, overwrite=True, skip=False): 
+    """Appends a list of records (new_data) to a json file (filename). 
+    Adapted from: https://www.geeksforgeeks.org/append-to-json-file-using-python/"""  
+    
+    if (overwrite==True) & (skip==True):
+        raise Exception("Only 1 of overwrite or skip may be set to True")
+
+    # find if file exists
+    exists = os.path.exists(filename)
+
+    if exists==False:
+        mode = 'w'
+    else:
+        if overwrite==True:
+            # exists=False
+            mode = 'w'
+            
+        elif skip == True:
+            return 
+            
+        else:
+            mode = 'r+'
+
+    
+    with open(filename,mode) as file:
+
+        if mode == 'r+':
+            # First we load existing data into a dict.
+            file_data = json.load(file)
+            
+            ## Choose extend or append
+            if (type(new_data) == list) & (type(file_data) == list):
+                file_data.extend(new_data)
+            else:
+                 file_data.append(new_data)
+            # Sets file's current position at offset.
+            file.seek(0)
+        else:
+            file_data = new_data
+            
+        # convert back to json.
+        json.dump(file_data, file)
+        return
 
 
 def millions(x,pos,prefix='$', suffix=None,float_fmt=","):
@@ -335,3 +379,52 @@ def read_and_fix_json(JSON_FILE):
         previous_df =  pd.read_json(JSON_FILE)
         
     return previous_df
+
+import requests
+
+def request_reviews(movie_id,login,page=1):
+    # source: https://developer.themoviedb.org/reference/movie-reviews
+    url = f"https://api.themoviedb.org/3/movie/{movie_id}/reviews?language=en-US&page={page}"
+
+    headers = {
+        "accept": "application/json",
+        "Authorization": f"Bearer {login['api-token']}"
+    }
+    response = requests.get(url, headers=headers)
+    try:
+        return response.json()
+    except:
+        print("[!] Error returning response.json()")
+        return response 
+    # print(response.text)
+
+def get_reviews(movie_id,login,start_page=1):
+    
+    reviews_json = request_reviews(movie_id, page=start_page)
+    try:
+        n_pages = reviews_json['total_pages']
+    except:
+        n_pages=1
+        
+    all_responses = reviews_json['results']
+    
+    for page in range(2, n_pages+1):
+        reviews_json = request_reviews(movie_id, page=page)
+        all_responses.extend(reviews_json['results'])
+
+    ## Add movie id to all results
+    final_results = []
+    for review in all_responses:
+        
+        review_results = {
+                    "movie_id": movie_id, #review["movie_id"],
+                    "review_id": review["id"],
+                    "author_rating": review["author_details"]["rating"],
+                    "review_text": review["content"],
+                    "created_at": review['created_at'],
+                    # 'updated_at':review['updated_at']
+        }
+    
+        final_results.append(review_results)
+        
+    return final_results
