@@ -1,3 +1,5 @@
+import os, json, requests
+
 def annotate_bars(ax,fmt='.2f',size=15,xytext=(0,8),ha='center', va='center',
                   convert_millions=False, despine=False, spines = ['right','top'],
 				  use_errorbars=False):
