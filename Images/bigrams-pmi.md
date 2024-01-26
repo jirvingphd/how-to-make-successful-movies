@@ -1,12 +1,12 @@
-| Bigrams (Low Ratings)   |     Pmi | Bigrams (High Ratings)    |     Pmi |
-|:------------------------|--------:|:--------------------------|--------:|
-| ('samuel', 'l.')        | 13.9046 | ('dos', 'santos')         | 14.7901 |
-| ('heath', 'ledger')     | 13.9046 | ('bona', 'fide')          | 14.6646 |
-| ('alicia', 'vikander')  | 13.7671 | ('việt', 'nam')           | 14.6646 |
-| ('margot', 'robbie')    | 13.6822 | ('laurence', 'fishburne') | 14.4336 |
-| ('crimson', 'peak')     | 13.4896 | ('rosamund', 'pike')      | 14.2495 |
-| ('scorch', 'trials')    | 13.4192 | ('mads', 'mikkelsen')     | 14.2357 |
-| ('los', 'angeles')      | 13.2417 | ('hans', 'zimmer')        | 14.2198 |
-| ('silver', 'lake')      | 13.1677 | ('chang', 'dong')         | 14.2171 |
-| ('warner', 'bros.')     | 13.1542 | ('kung', 'fu')            | 14.2051 |
-| ('tobey', 'maguire')    | 13.1391 | ('harley', 'quinn')       | 14.1621 |
+| Bigrams (Low Ratings)    |     Pmi | Bigrams (High Ratings)   |     Pmi |
+|:-------------------------|--------:|:-------------------------|--------:|
+| ('chang', 'dong')        | 15.3099 | ('dos', 'santos')        | 14.9114 |
+| ('gomez', 'rejon')       | 15.0469 | ('vera', 'farmiga')      | 14.426  |
+| ('việt', 'nam')          | 15.0469 | ('chadwick', 'boseman')  | 14.3854 |
+| ('alicia', 'vikander')   | 14.9213 | ('cup', 'tea')           | 14.3265 |
+| ('agatha', 'christie')   | 14.9094 | ('bryce', 'dallas')      | 14.2885 |
+| ('donnie', 'darko')      | 14.8245 | ('donnie', 'yen')        | 14.211  |
+| ('lakeith', 'stanfield') | 14.8245 | ('⭐', '⭐')             | 14.0781 |
+| ('saoirse', 'ronan')     | 14.8245 | ('gal', 'gadot')         | 14.011  |
+| ('timothée', 'chalamet') | 14.7249 | ('warner', 'bros.')      | 13.9703 |
+| ('palm', 'springs')      | 14.6683 | ('judi', 'dench')        | 13.9565 |
