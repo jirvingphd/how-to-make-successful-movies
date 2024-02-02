@@ -12,7 +12,7 @@
 </ul>
 
 
-<center><img src="Images/movies-generic-header.png" width=200px></center>
+<center><img src="Images/banners/DALL-E-movie-banner_01.webp" width=800px alt="Successful Movie Banner - Made with DALL E"></center>
 
 
 ## Business Problem
@@ -25,9 +25,11 @@ I will use a combination of machine-learning-model-based insights and hypothesis
 
 <hr>
 
-[Click here for the Companion Tableau Dashboard](https://public.tableau.com/views/HowtoMakeaSuccessfulMovie/Home?:language=en-US&:display_count=n&:origin=viz_share_link)
+<blockquote><a href="https://public.tableau.com/views/MovieDashboard_17068360838980/Home?:language=en-US&publish=yes&:display_count=n&:origin=viz_share_link">Click here for the Companion Tableau Dashboard</a></blockquote>
 
-<center><a href="https://public.tableau.com/views/HowtoMakeaSuccessfulMovie/Home?:language=en-US&:display_count=n&:origin=viz_share_link"><img src="Images/tableau-dash-preview.png" width=600></a></center>
+<center><a href="https://public.tableau.com/views/HowtoMakeaSuccessfulMovie/Home?:language=en-US&:display_count=n&:origin=viz_share_link"><img src="Images/apps/tableau-dash-main.png" width=800></a></center>
+
+<hr>
   
 ### Specifications/Constraints    
 - The stakeholder wants to focus on attributes of the movies themselves vs. the actors and directors connected to those movies. 
