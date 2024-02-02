@@ -1,5 +1,7 @@
 import os, json, requests
 
+
+
 def annotate_bars(ax,fmt='.2f',size=15,xytext=(0,8),ha='center', va='center',
                   convert_millions=False, despine=False, spines = ['right','top'],
 				  use_errorbars=False):
@@ -235,105 +237,105 @@ def get_funcformatter(kind='m',prefix='$',suffix=None, float_fmt=','):
 	
 	
 
-def evaluate_ols(result,X_train_df, y_train, figsize=(12,5), show_summary=True,return_fig=False):
-	"""Plots a Q-Q Plot and residual plot for a statsmodels OLS regression.
-	"""
-	import matplotlib.pyplot as plt
-	import statsmodels.api as sm
+# def evaluate_ols(result,X_train_df, y_train, figsize=(12,5), show_summary=True,return_fig=False):
+# 	"""Plots a Q-Q Plot and residual plot for a statsmodels OLS regression.
+# 	"""
+# 	import matplotlib.pyplot as plt
+# 	import statsmodels.api as sm
 	
-	if show_summary==True:
-		try:
-			display(result.summary())
-		except:
-			pass
+# 	if show_summary==True:
+# 		try:
+# 			display(result.summary())
+# 		except:
+# 			pass
 
-	## save residuals from result
-	y_pred = result.predict(X_train_df)
-	resid = y_train - y_pred
+# 	## save residuals from result
+# 	y_pred = result.predict(X_train_df)
+# 	resid = y_train - y_pred
 
-	fig, axes = plt.subplots(ncols=2,figsize=figsize)
+# 	fig, axes = plt.subplots(ncols=2,figsize=figsize)
 
-	## Normality 
-	sm.graphics.qqplot(resid,line='45',fit=True,ax=axes[0]);
+# 	## Normality 
+# 	sm.graphics.qqplot(resid,line='45',fit=True,ax=axes[0]);
 
-	## Homoscedasticity
-	ax = axes[1]
-	ax.scatter(y_pred, resid, edgecolor='white',lw=1)
-	ax.axhline(0,zorder=0)
-	ax.set(ylabel='Residuals',xlabel='Predicted Value');
-	plt.tight_layout()
-	if return_fig:
-		return fig
+# 	## Homoscedasticity
+# 	ax = axes[1]
+# 	ax.scatter(y_pred, resid, edgecolor='white',lw=1)
+# 	ax.axhline(0,zorder=0)
+# 	ax.set(ylabel='Residuals',xlabel='Predicted Value');
+# 	plt.tight_layout()
+# 	if return_fig:
+# 		return fig
 
 
-def check_nulls_nunique(df,plot=True):
-	"""Displays a df summary of the # & % of null values and unique values for each column.
+# def check_nulls_nunique(df,plot=True):
+# 	"""Displays a df summary of the # & % of null values and unique values for each column.
 
-	Args:
-		df (DataFrame): Frame to check
-		plot (bool, optional): Whether to plot missingo.matrixs. Defaults to True.
-	"""
-	import pandas as pd
-	import matplotlib.pyplot as plt
-	import missingno
+# 	Args:
+# 		df (DataFrame): Frame to check
+# 		plot (bool, optional): Whether to plot missingo.matrixs. Defaults to True.
+# 	"""
+# 	import pandas as pd
+# 	import matplotlib.pyplot as plt
+# 	import missingno
 
-	report = pd.DataFrame({"# null":df.isna().sum(),
-				"% null":df.isna().sum()/len(df)*100,
-				'# unique':df.nunique(),
-						'% unique':df.nunique()/len(df)*100})
-	display(report.round(2))
-	if plot:
-		missingno.matrix(df)
-		plt.show()
+# 	report = pd.DataFrame({"# null":df.isna().sum(),
+# 				"% null":df.isna().sum()/len(df)*100,
+# 				'# unique':df.nunique(),
+# 						'% unique':df.nunique()/len(df)*100})
+# 	display(report.round(2))
+# 	if plot:
+# 		missingno.matrix(df)
+# 		plt.show()
 		
 		
 		
-def find_outliers_Z(data, verbose=True):
-	"""Identifies outliers using Z-score > 3 rule.
+# def find_outliers_Z(data, verbose=True):
+# 	"""Identifies outliers using Z-score > 3 rule.
 
-	Args:
-		data (pd.Series): data to check for outliers
-		verbose (bool, optional): Print # of outliers in column. Defaults to True.
+# 	Args:
+# 		data (pd.Series): data to check for outliers
+# 		verbose (bool, optional): Print # of outliers in column. Defaults to True.
 
-	Returns:
-		Boolean Series: pd.Series with True/False for every value
-	"""
-	from scipy import stats
-	import numpy as np
-	outliers = np.abs(stats.zscore(data))>3
+# 	Returns:
+# 		Boolean Series: pd.Series with True/False for every value
+# 	"""
+# 	from scipy import stats
+# 	import numpy as np
+# 	outliers = np.abs(stats.zscore(data))>3
 
-	if verbose:
-		print(f"- {outliers.sum()} outliers found in {data.name} using Z-Scores.")
-	return outliers
+# 	if verbose:
+# 		print(f"- {outliers.sum()} outliers found in {data.name} using Z-Scores.")
+# 	return outliers
 	
 	
 	
 	
-def find_outliers_IQR(data, verbose=True):
-	"""Identifies outliers using IQR Rule. 
-	Data that is more than 1.5*IQR less than Q1 or above Q3 is an outlier.
+# def find_outliers_IQR(data, verbose=True):
+# 	"""Identifies outliers using IQR Rule. 
+# 	Data that is more than 1.5*IQR less than Q1 or above Q3 is an outlier.
 	
 
-	Args:
-		data (pd.Series): data to check for outliers
-		verbose (bool, optional): Print # of outliers in column. Defaults to True.
+# 	Args:
+# 		data (pd.Series): data to check for outliers
+# 		verbose (bool, optional): Print # of outliers in column. Defaults to True.
 
-	Returns:
-		Boolean Series: pd.Series with True/False for every value
-	"""
-	import numpy as np
-	q3 = np.quantile(data,.75)
-	q1 = np.quantile(data,.25)
+# 	Returns:
+# 		Boolean Series: pd.Series with True/False for every value
+# 	"""
+# 	import numpy as np
+# 	q3 = np.quantile(data,.75)
+# 	q1 = np.quantile(data,.25)
 
-	IQR = q3 - q1
-	upper_threshold = q3 + 1.5*IQR
-	lower_threshold = q1 - 1.5*IQR
+# 	IQR = q3 - q1
+# 	upper_threshold = q3 + 1.5*IQR
+# 	lower_threshold = q1 - 1.5*IQR
 
-	outliers = (data<lower_threshold) | (data>upper_threshold)
-	if verbose:
-		print(f"- {outliers.sum()} outliers found in {data.name} using IQR.")
+# 	outliers = (data<lower_threshold) | (data>upper_threshold)
+# 	if verbose:
+# 		print(f"- {outliers.sum()} outliers found in {data.name} using IQR.")
 		
-	return outliers
+# 	return outliers
 	
 	
 	
@@ -382,9 +384,9 @@ def read_and_fix_json(JSON_FILE):
         
     return previous_df
 
-import requests
 
 def request_reviews(movie_id,login,page=1):
+    import requests
     # source: https://developer.themoviedb.org/reference/movie-reviews
     url = f"https://api.themoviedb.org/3/movie/{movie_id}/reviews?language=en-US&page={page}"
 
