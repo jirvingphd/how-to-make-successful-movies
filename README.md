@@ -40,6 +40,8 @@ I will use a combination of machine-learning-model-based insights and hypothesis
 <hr>
 
 
+<!-- <center><img src="Images/banners/DALL-E-movie-banner_01.webp" width=800px alt="Successful Movie Banner - Made with DALL E"></center> -->
+
 # `Part 1- Initial IMDB Data Processing.ipynb`
 
   
@@ -84,7 +86,7 @@ ___
 ## EDA Summary of Extracted Data
 
 ### Years Extracted
-<img src="images/EDA_year_counts.png"  width=60%>
+<img src="Images/EDA_year_counts.png"  width=60%>
 
 
 ### Average Revenue By Year
@@ -94,10 +96,6 @@ ___
 ### MPAA Rating Counts
 <img src="Images/EDA_certification_counts.png"  width=60%>
 
-
-```python
-"Images/EDA_avg_revenue_by_certification.png"
-```
 
 
 
@@ -148,6 +146,7 @@ ___
 ### Query 1) Movie Certification, Runties, budget, revenue, and metadat
 
 
+
 - **SQL Query (For tests exlcuding genres)**
 ```SQL
 
@@ -174,6 +173,8 @@ WHERE
 
 
 - **Preview of data:**
+
+
 |    | imdb_id   | primaryTitle                                           | release_date   | certification   |   runtime |    budget |   revenue |
 |---:|:----------|:-------------------------------------------------------|:---------------|:----------------|----------:|----------:|----------:|
 |  0 | tt0168629 | Dancer in the Dark                                     | 2000-06-30     | R               |       140 |  12500000 |  45600000 |
@@ -184,7 +185,6 @@ WHERE
 
 
 ### Query 2) Movie Certification, Runties, budget, revenue, and metadat
-
 
 
 
@@ -215,6 +215,8 @@ WHERE
 
 
 - **Preview of data:**
+
+
 |    | imdb_id   | primaryTitle   |   budget |   revenue | genre_name   |
 |---:|:----------|:---------------|---------:|----------:|:-------------|
 |  0 | tt0035423 | Kate & Leopold | 48000000 |  76019048 | Comedy       |
