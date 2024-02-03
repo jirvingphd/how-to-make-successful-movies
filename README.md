@@ -16,7 +16,7 @@
 
 - Updated 02/02/2024
 
-<center><img src="Images/banners/movies-generic-header.png" width=400px></center>
+<center><img src="Images/banners/movies-generic-header.png" width=250px></center>
 
 ## Business Problem
 
