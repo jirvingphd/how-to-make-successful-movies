@@ -24,6 +24,8 @@ WHERE
 
 
 - **Preview of data:**
+
+
 |    | imdb_id   | primaryTitle                                           | release_date   | certification   |   runtime |    budget |   revenue |
 |---:|:----------|:-------------------------------------------------------|:---------------|:----------------|----------:|----------:|----------:|
 |  0 | tt0168629 | Dancer in the Dark                                     | 2000-06-30     | R               |       140 |  12500000 |  45600000 |

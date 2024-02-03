@@ -25,6 +25,8 @@ WHERE
 
 
 - **Preview of data:**
+
+
 |    | imdb_id   | primaryTitle   |   budget |   revenue | genre_name   |
 |---:|:----------|:---------------|---------:|----------:|:-------------|
 |  0 | tt0035423 | Kate & Leopold | 48000000 |  76019048 | Comedy       |
