@@ -175,25 +175,80 @@ def check_assumptions_normality(groups_dict, alpha=.05, as_markdown=False):
             p = np.nan
             
         ## save the p val, test statistic, and the size of the group
-        results.append({'stat test':test_name, 'group':group_name, 
+        results.append({#'stat test':test_name, 
+                        'group':group_name, 
                         'n': len(group_data),
                          'stat':f"{stat:.5f}",
                         'p':p,#f"{p:.10f}",
                         'p (.4)':f"{p:.4f}",
                         'sig?': p<alpha})
-        results_df = pd.DataFrame(results).set_index(['stat test',"group"])
+
+    results_df = pd.DataFrame(results).sort_values('group', ascending=True)
+
     if as_markdown == True:
-        results_df = normal_results_to_markdown(results_df, sort_by='group')
-    return results_df
+        results_df = results_df.to_markdown(index=False)   
+        print(results_df)
+    else:
+        return results_df#.set_index('stat test')
+        
 
 
-# Prepare Normality Resuls as markdown
-def normal_results_to_markdown(normal_results, sort_by='group'):
-    normal_results = normal_results.reset_index()
-    normal_results = normal_results.drop(columns=['stat test'])
-    normal_results.sort_values(by=sort_by)
+
     
-    return normal_results.to_markdown(index=False)
+    # if as_markdown == True:
+
+    #     results_df = normal_results_to_markdown(results_df, sort_by='group')
+    #     print(results_df)
+    # else:
+    #     results_df = pd.DataFrame(results).set_index('stat test')#,"group"])
+
+    #     return results_df
+
+
+# # Prepare Normality Resuls as markdown
+# def normal_results_to_markdown(normal_results, sort_by='group'):
+#     normal_results = normal_results.reset_index()
+#     normal_results = normal_results.drop(columns=['stat test'])
+#     normal_results.sort_values(by=sort_by)
+    
+#     return normal_results.to_markdown(index=False)
+
+
+
+
+def remove_and_display_outliers(groups, as_markdown=True):
+    groups_cleaned = {}
+
+    outlier_results = []
+
+    for group_name, data in groups.items():
+    
+        outliers = np.abs(stats.zscore(data)) > 3
+
+        
+        outlier_results.append({'group':group_name,
+                               'n (original)': len(data),
+                               '# outliers': outliers.sum(),
+                               "% outliers":f"{outliers.sum()/len(outliers)*100: .2f}%"
+                               })
+        # print(f"There were {} ({outliers.sum()/len(outliers)*100:.2f}%) outliers in the {sector} group.")
+    
+        group_data = data.loc[~outliers]
+        groups_cleaned[group_name] = group_data
+
+        # Formatting results
+        results_df = pd.DataFrame(outlier_results)
+        results_df = results_df.sort_values('group', ascending=True)
+        
+    if as_markdown == True:
+        results_df = results_df.to_markdown(index=False)   
+        print(results_df)
+    else:
+        display(results_df)
+    return groups_cleaned#, results_df
+
+
+
 
 
 def add_sig_legend(ax, frame=False, bbox_to_anchor=(1,1), title='Significance Levels', marker='',
