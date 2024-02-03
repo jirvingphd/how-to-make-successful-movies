@@ -2,7 +2,9 @@
 
 - James M. Irving, Ph.D.
 
-<ul>
+
+<blockquote>
+    <ul>
   <li><a href="https://www.linkedin.com/in/james-irving-phd" rel="nofollow noreferrer">
     <img src="https://i.stack.imgur.com/gVE0j.png" alt="linkedin"> LinkedIn
   </a> </li>
@@ -10,26 +12,36 @@
     <img src="https://i.stack.imgur.com/tskMh.png" alt="github"> Github
   </a></li>
 </ul>
+</blockquote>
 
+- Updated 02/02/2024
 
-<center><img src="Images/banners/DALL-E-movie-banner_01.webp" width=800px alt="Successful Movie Banner - Made with DALL E"></center>
-
+<center><img src="Images/banners/movies-generic-header.png" width=400px></center>
 
 ## Business Problem
 
 
-I have been hired to process and analyze IMDB's extensive publicly-available dataset, supplement it with financial data from TMDB's API, convert the raw data into a MySQL database, and then use that database for extracting insights and recommendations on how to make a successful movie.
+I have been hired to process and analyze IMDB's extensive publicly-available dataset, supplement it with financial data from TMDB's API, perform ETL on all of the raw data and construct a MySQL database. 
 
-I will use a combination of machine-learning-model-based insights and hypothesis testing to extract insights for our stakeholders.
+I will then export this mysql database as a collection of csvs for constructing a Tableau dashboard.
+
+
+I will use a combination of machine-learning-model-based insights and hypothesis testing to extract insights for our stakeholders on how to make a successful movie.
 
 
 <hr>
+
+### Companion Tableau Dashboard
+
+<center><a href="https://public.tableau.com/views/HowtoMakeaSuccessfulMovie/Home?:language=en-US&:display_count=n&:origin=viz_share_link"><img src="Images/apps/tableau-dash-main.png" width=600></a></center>
 
 <blockquote><a href="https://public.tableau.com/views/MovieDashboard_17068360838980/Home?:language=en-US&publish=yes&:display_count=n&:origin=viz_share_link">Click here for the Companion Tableau Dashboard</a></blockquote>
 
-<center><a href="https://public.tableau.com/views/HowtoMakeaSuccessfulMovie/Home?:language=en-US&:display_count=n&:origin=viz_share_link"><img src="Images/apps/tableau-dash-main.png" width=800></a></center>
-
 <hr>
+
+
+# `Part 1- Initial IMDB Data Processing.ipynb`
+
   
 ### Specifications/Constraints    
 - The stakeholder wants to focus on attributes of the movies themselves vs. the actors and directors connected to those movies. 
@@ -37,8 +49,6 @@ I will use a combination of machine-learning-model-based insights and hypothesis
 - They also did not want to include movies released before the year 2000.
 - The stakeholder is particularly interested in how the MPAA rating, genre(s), runtime, budget, and production companies influence movie revenue and user ratings.
 
-
-## `Part 1- Initial IMDB Data Processing.ipynb`
 
 #### IMDB Movie Metadata
 - I will download fresh movie metadata from IMDB's public datasets and filter out movies that meet the stakeholder's requirements/constraints.
@@ -53,121 +63,633 @@ I will use a combination of machine-learning-model-based insights and hypothesis
     - title.akas.tsv.gz
   
 
-##  `Part 2 - Extracting TMDB Data.ipynb`
+#  `Part 2 - Extracting TMDB Data.ipynb`
 
-### Supplement Data from The Movie Database  (TMDB)'s
+### Supplement IMDB Data Using The Movie Database  (TMDB)'s API
 
 - I will extract MPAA rating and financial data for the movies using TMDB's API.
 
-<img src="./Images/tmdb_logo_blue_long.svg" width=400px>
+___ 
+
+<img src="./Images/tmdb_logo_blue_long.svg" width=300px>
         
  
->"This product uses the TMDB API but is not endorsed or certified by TMDB."
+>"This product uses the TMDB API but is not endorsed or certified by TMDB." 
        
 
+
+___
+
         
-### EDA Summary of Extracted Data
+## EDA Summary of Extracted Data
 
-### Years Extracted (thus far)
-<img src="./Images/EDA_year_counts.png"  width=60%>
-     
+### Years Extracted
+<img src="images/EDA_year_counts.png"  width=60%>
+
+
+### Average Revenue By Year
+
+<img src="Images/EDA_avg_revenue_per_year.png" width=60%>
+
 ### MPAA Rating Counts
+<img src="Images/EDA_certification_counts.png"  width=60%>
 
-<img src="./Images/EDA_certification_counts.png"  width=60%>
+
+```python
+"Images/EDA_avg_revenue_by_certification.png"
+```
+
+
 
 ### MPAA Rating Revenue Comparison
-
 <img src="Images/EDA_avg_revenue_by_certification.png"  width=60%>
 
-
 ### MPAA Rating - Average Budget Comparison
-<img src="./Images/EDA_avg_budget_certification.png"  width=60%>  
-
+<img src="Images/EDA_avg_budget_by_certification.png"  width=60%>  
 
 ### MPAA Rating - Average ROI Comparison
-<img src="./Images/EDA_avg_roi_certification.png"  width=60%>
+<img src="Images/EDA_avg_roi_by_certification.png"  width=60%>
         
        
 
-## `Part 3 - MySQL Database Construction`
+# `Part 3 - MySQL Database Construction`
 
 - I will then normalize all IMDB movie data into a proper MySQL database.
     - MVP Version (included): Local Server Installation with Publicly-Available .sql file for recreationl.
-    - AAB Version (future work): AWS-hosted RDS MySQL database. 
-- See `SQL` folder for:
+    - AAB Version (disabled): AWS-hosted RDS MySQL database. Disabled due to exceeding AWS monthly budget.
+- See `Data-SQL` folder for:
     - `movies.sql`: exported SQL DB
     - `movies_project.mwb`: model used for ERD
     
 
 ### ERD
-<img src="SQL/ERD_movies.png">
+
+
+<img src="Data-SQL/ERD_movies.png">
+
+<!-- <img src="Data-SQL/ERD_movies-v2.png"> -->
+
+# `Part 4 - Hypothesis Testing`
+
+
+## Hypotheses to Test
+
+>- Q1: Does the MPAA rating of a movie (G/PG/PG-13/R) affect how much revenue the movie generates? If so, which rating earns the most revenue?
+>- Q2; Do movies that are over 2 hours long earn more or less revenue than movies that are less than 2 hours long?
+>- Q3: Do movies released after 2020 earn less revenue than movies released before 2020?
+>- Q4: Do some movie genres earn more revenue than others?
+
+### Data for Tests (SQL Queries)
+
+- To answer the questions above, 2 version of the data were extracted from the mysql database.
+    - Query 1) Movie Information for Q1-Q3 (one to one join; one row per movie)
+    - Query 2) Movie Information for Q4 with genres (one-to-many join; one row per genre per movie)
+
+### Query 1) Movie Certification, Runties, budget, revenue, and metadat
+
+
+- **SQL Query (For tests exlcuding genres)**
+```SQL
+
+SELECT 
+    tm.imdb_id,
+    tb.primaryTitle,
+    tm.release_date,
+    tm.certification,
+    tb.runtimeMinutes as runtime,
+    tm.budget,
+    tm.revenue
+FROM
+    tmdb tm
+        JOIN
+    title_basics tb ON tm.imdb_id = tb.tconst
+WHERE
+    tm.budget > 0 AND tm.revenue > 0
+        AND tm.certification IS NOT NULL
+        AND tm.certification NOT LIKE 'NR'
+        AND tm.certification NOT LIKE 'NC%';
+
+```
+
+
+
+- **Preview of data:**
+|    | imdb_id   | primaryTitle                                           | release_date   | certification   |   runtime |    budget |   revenue |
+|---:|:----------|:-------------------------------------------------------|:---------------|:----------------|----------:|----------:|----------:|
+|  0 | tt0168629 | Dancer in the Dark                                     | 2000-06-30     | R               |       140 |  12500000 |  45600000 |
+|  1 | tt0314412 | My Life Without Me                                     | 2003-03-07     | R               |       106 |   2500000 |  12300000 |
+|  2 | tt0325980 | Pirates of the Caribbean: The Curse of the Black Pearl | 2003-07-09     | PG-13           |       143 | 140000000 | 655011224 |
+|  3 | tt0266697 | Kill Bill: Vol. 1                                      | 2003-10-10     | R               |       111 |  30000000 | 180906076 |
+|  4 | tt0338013 | Eternal Sunshine of the Spotless Mind                  | 2004-03-19     | R               |       108 |  20000000 |  72258126 |
+
+
+### Query 2) Movie Certification, Runties, budget, revenue, and metadat
+
+
+
+
+- **SQL Query (For tests including genre)**
+```SQL
+
+SELECT 
+    tm.imdb_id,
+    tb.primaryTitle,
+    tm.budget,
+    tm.revenue,
+    g.genre_name
+FROM
+    tmdb tm
+        JOIN
+    title_basics tb ON tm.imdb_id = tb.tconst
+        JOIN
+    title_genres tg ON tg.tconst = tb.tconst
+        JOIN
+    genres g ON g.genre_id = tg.genre_id
+WHERE
+    tm.budget > 0 AND tm.revenue > 0
+    AND g.genre_name IS NOT NULL
+    AND g.genre_name NOT LIKE "News";
+
+```
+
+
+
+- **Preview of data:**
+|    | imdb_id   | primaryTitle   |   budget |   revenue | genre_name   |
+|---:|:----------|:---------------|---------:|----------:|:-------------|
+|  0 | tt0035423 | Kate & Leopold | 48000000 |  76019048 | Comedy       |
+|  1 | tt0035423 | Kate & Leopold | 48000000 |  76019048 | Fantasy      |
+|  2 | tt0035423 | Kate & Leopold | 48000000 |  76019048 | Romance      |
+|  3 | tt0118589 | Glitter        | 22000000 |   5271666 | Drama        |
+|  4 | tt0118589 | Glitter        | 22000000 |   5271666 | Music        |
+
+
+## Hypothesis Testing Workflow 
+
+#### Step 1: Select the Appropriate Hypothesis Test
+
+- Q1: What type of data do I have (Numeric or categorical?)
+- Q2: How many samples/groups am I comparing?
+
+>Using the answers to the above 2 questions: select the type of test from this table.
+
+| What type of comparison? | Numeric Data | Categorical Data|
+| --- | --- | --- |
+|Sample vs Known Quantity/Target|1 Sample T-Test| Binomial Test|
+|2 Samples | 2 Sample T-Test| Chi-Square|
+|More than 2| ANOVA and/or Tukey | Chi Square|
+
+#### STEP 2:  Do we meet the assumptions of the chosen test?
+
+- [One-Sample T-Test](https://statistics.laerd.com/spss-tutorials/one-sample-t-test-using-spss-statistics.php)
+    - No significant outliers
+    - Normality
+
+- [Independent t-test (2-sample)](https://statistics.laerd.com/statistical-guides/independent-t-test-statistical-guide.php)
+    - No significant outliers
+    - Normality
+    - Equal Variance
+
+- [One Way ANOVA](https://statistics.laerd.com/spss-tutorials/one-way-anova-using-spss-statistics.php)
+    - No significant outliers
+    - Equal variance
+    - Normality
+
+- [Chi-Square test](https://statistics.laerd.com/spss-tutorials/chi-square-test-for-association-using-spss-statistics.php)
+    - Both variables are categorical
+
+ 
+|Assumption test| Function |
+| --- | --- |
+| **Normality**| `scipy.stats.shapiro`|
+| **Equal Variance** | `scipy.stats.levene`|
+
+
+#### Step 3: Select Final Test Based on Checking Assumptions 
+
+If we meet all of the assumptions, we can use 
+
+> **Table Source: Parametric  T-Tests vs Non-Parametric Alternatives**
+- [Choosing Between Parametric and Non-Parametric Tests](https://blog.minitab.com/blog/adventures-in-statistics-2/choosing-between-a-nonparametric-test-and-a-parametric-test)
+
+- **Select the test from the right Nonparametric column that matches your Parametric t-test.** 
+
+<!-- | Parametric tests (means) | Nonparametric tests (medians) |
+ | --- | --- |
+ | 1-sample t test | 1-sample Wilcoxon |
+ | 2-sample t test | Mann-Whitney U test |
+ | One-Way ANOVA | Kruskal-Wallis |
+ -->
+
+| Parametric tests (means) | Function | Nonparametric tests (medians) | Function |
+ | --- | --- | --- | --- |
+ | **1-sample t test** |`scipy.stats.ttest_1samp()`|  **1-sample Wilcoxon** |`scipy.stats.wilcoxon`|
+ | **2-sample t test** |`scipy.stats.ttest_ind()` | **Mann-Whitney U test** |`scipy.stats.mannwhitneyu()` |
+ | **One-Way ANOVA** | `scipy.stats.f_oneway()` | **Kruskal-Wallis** | `scipy.stats.kruskal` | 
+ 
+
+- Perform the selected test to obtain the p-value to interpret.
+
+
+#### STEP 4 Interpret Result & Post-Hoc Tests
+
+
+- If p value is < $\alpha$:
+    - Reject the null hypothesis.
+    - Calculate effect size (e.g. Cohen's $d$)
+    
+- If p<.05 AND you have multiple groups (i.e. ANOVA)
+    - Perform a pairwise Tukey's  Multiuple Comparison test to determine which groups were significantly different.
+    - [Tukey pairwise comparison test](https://www.statsmodels.org/stable/generated/statsmodels.stats.multicomp.pairwise_tukeyhsd.html)
+    - `statsmodels.stats.multicomp.pairwise_tukeyhsd`
     
 
-## `Part 4 - Hypothesis Testing` - WIP
+## Q1: # Q1: Does MPAA rating affec average revenue?
 
-
-- I will then use the MySQL database to answer several hypotheses about movie success.
-
-### Q1: Do some MPAA Ratings make more revenue than others?
-
-##### Hypothesis
+### Hypothesis
 - $H_0$ (Null Hypothesis): All MPAA ratings generate have equal average revenue. 
 - $H_A$ (Alternative Hypothesis):  Some MPAA ratings earn significantly more/less revenue than others.
 
-##### Selecting the Right Test
-- We have Numerical Data, with more than 2 groups, and therefore want to perform One way ANOVA.
+### Selecting the Right Test
+- We have Numerical Data
+- with more than 2 groups
+- We want a One way ANOVA
 
 ### ANOVA Assumptions
 - No significant outliers
 - Normality
 - Equal Variance
 
+#### Normality Assumption
+
+| group   |    n |    stat |           p |   p (.4) | sig?   |
+|:--------|-----:|--------:|------------:|---------:|:-------|
+| G       |   76 | 0.71435 | 7.28273e-11 |        0 | True   |
+| PG      |  528 | 0.68657 | 4.01101e-30 |        0 | True   |
+| PG-13   | 1374 | 0.58601 | 0           |        0 | True   |
+| R       | 1602 | 0.57287 | 0           |        0 | True   |
+
+- Didn't meet assumption of normality, but group n's are sufficiently large to safely disregard assumption of normality.
 
 ##### Outliers Removed
-- There were 2 outliers in the PG-13 group.
-- There were 1 outliers in the PG group.
-- There were 4 outliers in the R group.
-- There were 1 outliers in the G group.
 
-##### Normality Assumption
-- We failed a Shapiro's test for normality for several groups and had too small $n$ for G-rated movies to safely ignore asumpton.
-<img src="Images/hypothesis_1_normality.png" width=200px>
+- The following outliers were removed from the analysis using the Z-score method.
+  
+| group   |   n (original) |   # outliers | % outliers   |   n (final) |
+|:--------|---------------:|-------------:|:-------------|------------:|
+| G       |             76 |            2 | 2.63%        |          74 |
+| PG      |            528 |           13 | 2.46%        |         515 |
+| PG-13   |           1374 |           30 | 2.18%        |        1344 |
+| R       |           1602 |           36 | 2.25%        |        1566 |
 
-- Therefore, we will perform a Kruskal-Wallis test instead of a One Way ANOVA
+#### Assumption of Equal Variance
 
+```
+LeveneResult(statistic=114.28641279259686, pvalue=1.3454791463102724e-70)
+```
+Groups do not have equal variance. 
 
-##### Final Conclusion
-- Test Result: `KruskalResult(statistic=29.15915632270992, pvalue=2.0734380490347713e-06)`
+#### Final Test Selection
 
->- Our Kruskal Wallis test returned a p-value <.0001. We reject the null hypothesis.
-    - There is a significant difference in the average revenue for different movie certifications.
-    - A post-hoc determined that movies rated R made significantly less than all other raings.
+- Since we failed the assumption of equal variance, we will use the non-parametric Kruskal Wallis instead of one-way ANOVA.
 
-<img src="./Images/hypothesis_revnue_mpaa_rating.png" width=400px>
+### Hypothsis Test Results
 
-### Future Work: Planned Hypotheses to Test
+- Test Result:
+```
+KruskalResult(statistic=475.2106095783153, pvalue=1.1236250591779874e-102)
+```
 
-
-- [x] Q1: Does the MPAA rating of a movie (G/PG/PG-13/R) affect how much revenue the movie generates? If so, which rating earns the most revenue?
-
-
-- Q1B: What if compare ROI instead of revenue?
-
-
-- Q2; Do movies that are over 2.5 hours long earn more revenue than movies that are 1.5 hours long (or less)?
-
-
-
-- Q3: Do movies released in 2020 earn less revenue than movies released in 2018?
+>- Our Kruskal Wallis test returned a p-value <.0001. Therefore, we reject the null hypothesis.
+    - We conclude that there is a significant difference in the average revenue for different movie certifications.
+    - We must perform a pairwise Tukey's Multiple Comparison test to identify which ratings were significantly different.
 
 
 
-- Q4: Do some movie genres earn more revenue than others?
+#### Post-Hoc Comparisons
+
+```
+            Multiple Comparison of Means - Tukey HSD, FWER=0.05            
+===========================================================================
+group1 group2     meandiff    p-adj       lower           upper      reject
+---------------------------------------------------------------------------
+     G     PG   22365342.1324 0.6143  -24763540.9256   69494225.1903  False
+     G  PG-13  -13536296.5139 0.8686  -58802241.9315   31729648.9037  False
+     G      R -103245893.7041    0.0 -148344088.6404  -58147698.7679   True
+    PG  PG-13  -35901638.6462    0.0  -55548148.9444   -16255128.348   True
+    PG      R -125611235.8365    0.0 -144868097.9603 -106354373.7126   True
+ PG-13      R  -89709597.1902    0.0 -103805729.1106  -75613465.2699   True
+---------------------------------------------------------------------------
+```
+### Final Interpretation
+
+>- According to the post-hoc Tukey's tests, G/PG/PG-13 movies make similar average revenue than all other ratings. However, PG movies make more money than PG-13.
+>- R-rated movied make significantly less revenue than every other genre!
 
 
-- Q5: Are some genres more highly rated than others?
+<img src="Images/hypotheses/revnue_mpaa_rating.png" >
+
+## Q2: Do movies that are over 2 hours long earn more or less revenue than movies that are less than 2 hours long?
+
+
+## Hypothesis
+- $H_0$ (Null Hypothesis): Movies longer than 2 hours generate the same average revenue as shorter movies.
+- $H_A$ (Alternative Hypothesis):  Movies longer than 2 hours generate more/less average revenue than shorter movies.
+
+### Selecting the Right Test
+- We have Numerical Data
+- with 2 groups
+- 2-sample t-test A.K.A. Independent T-Test
+
+### T-Test Assumptions
+- No significant outliers
+- Normality
+- Equal Variance
+
+#### Normality Assumption
+
+| group    |    n |    stat |          p |   p (.4) | sig?   |
+|:---------|-----:|--------:|-----------:|---------:|:-------|
+| 2+ hours |  664 | 0.68894 | 3.4863e-33 |        0 | True   |
+| <2 hours | 2916 | 0.57219 | 0          |        0 | True   |
+
+- We didn't meet assumption of normality, but n is sufficiently large to disregard assumption of normality.
+
+
+#### Outliers Removed
+
+- The following outliers were removed from the analysis using the Z-score method.
+  
+| group    |   n (original) |   # outliers | % outliers   |   n (final) |
+|:---------|---------------:|-------------:|:-------------|------------:|
+| 2+ hours |            664 |           11 | 1.66%        |         653 |
+| <2 hours |           2916 |           65 | 2.23%        |        2851 |
+
+#### Assumption of Equal Variance
+```
+LeveneResult(statistic=527.872338946773, pvalue=6.35084984584201e-109)
+```
+- The groups do NOT have equal variance. 
+
+#### Final Test Selection
+
+- Since we failed the assumption of equal variance, we will use Mann Whitney U test instead of a a 2-sample t-test.
+
+### Hypothsis Test Results
+
+- Test Result:
+```
+MannwhitneyuResult(statistic=1312978.5, pvalue=2.3697632561755602e-60)
+```
+
+>- Our Mann-Whitney U-test returned a significant p-value (p<.001), therefore we reject the null hypothesis that movie movies longer than 2 hours earn the same average revenue as shorter movies.
+
+
+### Final Interpretation
+>- Movies with long runtimes (2+ hours) earn significantly more revenue than movies less than 2 hours long.
+
+<img src="Images/hypotheses/revenue-by-runtime-group.png">
+
+## Q3: Do movies released after 2020 earn less revenue than movies released before 2020?
+
+
+## Hypothesis
+- $H_0$ (Null Hypothesis): Movies released before 2020 earn the same revenue as movies released during or after 2020.
+- $H_A$ (Alternative Hypothesis): Movies released before 2020 earn more revenue than movies released during or after 2020.
+
+### Selecting the Right Test
+- We have Numerical Data
+- with 2 groups
+- 2-sample t-test A.K.A. Independent T-Test
+
+### T-Test Assumptions
+- No significant outliers
+- Normality
+- Equal Variance
+
+#### Normality Assumption
+
+| group   |    n |    stat |           p |   p (.4) | sig?   |
+|:--------|-----:|--------:|------------:|---------:|:-------|
+| 2020+   |  365 | 0.51698 | 2.28204e-30 |        0 | True   |
+| <2020   | 3215 | 0.54951 | 0           |        0 | True   |
+
+- We didn't meet assumption of normality, but n is sufficiently large to disregard assumption of normality.
+
+
+#### Outliers Removed
+
+- The following outliers were removed from the analysis using the Z-score method.
+  
+| group   |   n (original) |   # outliers | % outliers   |   n (final) |
+|:--------|---------------:|-------------:|:-------------|------------:|
+| 2020+   |            365 |            9 | 2.47%        |         356 |
+| <2020   |           3215 |           90 | 2.80%        |        3125 |
+
+#### Assumption of Equal Variance
+
+```
+LeveneResult(statistic=3.2007677957173684, pvalue=0.07369067470860166)
+```
+- Levene's test returned p-value >.05, therefore we conclude that the groups DO indeed have equal variance.
+
+#### Final Test Selection
+
+-  Since goups have equal variance and we had sufficient n's to safely ignore the assumption of normality,  we will therefore run planned 2-sample T-test.
+
+### Hypothsis Test Results
+
+- Test Result:
+```
+Ttest_indResult(statistic=-1.4403686474133954, pvalue=0.14985311221809952)
+```
+
+>- Our 2-sample T-test had a p-value=.14, so we fail to reject the null hypothesis that movies released after 2020 earn less average revenue than movies released before 2020. 
+
+
+### Final Interpretation
+>- Movies released after 2020 earn similar average revenue as movies pre-2020.  
+
+<img src="Images/hypotheses/revenue-by-year-released.png">
+
+## Q4: Do some movie genres earn more revenue than others?
+
+### Hypothesis
+- $H_0$ (Null Hypothesis): All genres earn the same average revenue.
+- $H_A$ (Alternative Hypothesis): Some genres earn significantly more or less revenue than others.
+
+### Selecting the Right Test
+- We have Numerical Data
+- with >2 groups
+- One-Way ANOVA
+
+### ANOVA Assumptions
+- No significant outliers
+- Normality
+- Equal Variance
+
+#### Normality Assumption
+
+| group       |    n |    stat |           p |   p (.4) | sig?   |
+|:------------|-----:|--------:|------------:|---------:|:-------|
+| Action      | 1251 | 0.64001 | 2.8026e-45  |        0 | True   |
+| Adventure   |  998 | 0.73643 | 5.09555e-37 |        0 | True   |
+| Animation   |  284 | 0.81092 | 6.76274e-18 |        0 | True   |
+| Biography   |  358 | 0.55211 | 3.11521e-29 |        0 | True   |
+| Comedy      | 1690 | 0.58826 | 0           |        0 | True   |
+| Crime       |  810 | 0.51515 | 2.6933e-42  |        0 | True   |
+| Documentary |  103 | 0.4832  | 2.33071e-17 |        0 | True   |
+| Drama       | 2275 | 0.43823 | 0           |        0 | True   |
+| Family      |  270 | 0.66299 | 8.07008e-23 |        0 | True   |
+| Fantasy     |  352 | 0.59515 | 7.26684e-28 |        0 | True   |
+| History     |  157 | 0.50536 | 7.11757e-21 |        0 | True   |
+| Horror      |  586 | 0.68522 | 1.38515e-31 |        0 | True   |
+| Music       |  155 | 0.52749 | 2.51409e-20 |        0 | True   |
+| Musical     |   42 | 0.6486  | 8.86162e-09 |        0 | True   |
+| Mystery     |  522 | 0.6905  | 8.043e-30   |        0 | True   |
+| Romance     |  707 | 0.67684 | 1.40104e-34 |        0 | True   |
+| Sci-Fi      |  346 | 0.70632 | 3.55921e-24 |        0 | True   |
+| Sport       |  107 | 0.72344 | 6.64258e-13 |        0 | True   |
+| Thriller    |  775 | 0.56898 | 6.86069e-40 |        0 | True   |
+| War         |   57 | 0.63047 | 1.01374e-10 |        0 | True   |
+| Western     |   19 | 0.57144 | 2.31172e-06 |        0 | True   |
+
+
+
+
+
+
+
+- We didn't meet assumption of normality, but group n's are sufficiently large enough to safely disregard assumption of normality.
+
+
+##### Outliers Removed
+
+- The following outliers were removed from the analysis using the Z-score method.
+
+| group       |   n (original) |   # outliers | % outliers   |   n (final) |
+|:------------|---------------:|-------------:|:-------------|------------:|
+| Action      |           1251 |           26 | 2.08%        |        1225 |
+| Adventure   |            998 |           16 | 1.60%        |         982 |
+| Animation   |            284 |            5 | 1.76%        |         279 |
+| Biography   |            358 |            6 | 1.68%        |         352 |
+| Comedy      |           1690 |           42 | 2.49%        |        1648 |
+| Crime       |            810 |           11 | 1.36%        |         799 |
+| Documentary |            103 |            2 | 1.94%        |         101 |
+| Drama       |           2275 |           38 | 1.67%        |        2237 |
+| Family      |            270 |           10 | 3.70%        |         260 |
+| Fantasy     |            352 |            7 | 1.99%        |         345 |
+| History     |            157 |            4 | 2.55%        |         153 |
+| Horror      |            586 |           11 | 1.88%        |         575 |
+| Music       |            155 |            3 | 1.94%        |         152 |
+| Musical     |             42 |            1 | 2.38%        |          41 |
+| Mystery     |            522 |           12 | 2.30%        |         510 |
+| Romance     |            707 |           20 | 2.83%        |         687 |
+| Sci-Fi      |            346 |            8 | 2.31%        |         338 |
+| Sport       |            107 |            2 | 1.87%        |         105 |
+| Thriller    |            775 |           18 | 2.32%        |         757 |
+| War         |             57 |            3 | 5.26%        |          54 |
+| Western     |             19 |            1 | 5.26%        |          18 |
+
+#### Assumption of Equal Variance
+
+```
+LeveneResult(statistic=108.42043594386612, pvalue=0.0)
+```
+Groups do NOT have equal variance. 
+
+#### Final Test Selection
+
+- Since we failed the assumption of equal variance, we will use the non-parametric Kruskal Wallis instead of one-way ANOVA.
+
+### Hypothsis Test Results
+
+- Test Result:
+```
+KruskalResult(statistic=1322.232973478133, pvalue=5.122009908940558e-268)
+```
+
+>- Our Kruskal Wallis test returned a p-value<.0001, so we reject the null hypothesis that all genres earn the same average revenue.
+>- We must peform a Tukey's Pairwise Multiple Comparison Test to confirm which groups are significantly different.
+
+
+<img src="Images/hypotheses/revenue-by-genre.png" >
+
+#### Post-Hoc Comparisons
+
+> Note: the full results table is too large to display here, so  we will use the built-in diagnostic plot to visualize significant difference.
+
+<img src="Images/hypotheses/revenue-by-genre_tukeys_full.png" width=800px>
+
+
+> We can see that there are many pairs of significant comparisons between genres. We will focus on examining the significance of the Genres with the highest average revenue.
+
+### Tukey's Results - Highlighted Comparisons
+
+> In the graphs below, the group being compared vs. the other groups is annotated in blue. 
+Any groups that were signficantly different from this group will be annotated in red. Any groups that were statistically similarly will be in light gray.
+
+#### Animation & Adventure
+
+> Below, we can see that both Animation and Adventure generate significantly more revenue than all other genres(but are not different vs. each other).
+
+##### Animation vs. All
+<img src="Images/hypotheses/revenue-by-genre_tukeys_Animation.png" width=800px>
+
+##### Adventure vs. All
+<img src="Images/hypotheses/revenue-by-genre_tukeys_Adventure.png" width=800px>
+
+#### Sci-Fi  & Fantasy & Action
+
+> Sci-Fi and Fantasy are the next-highest average revenue (but are not differnent vs. each other).
+Below, we can see that both Sci-Fi and Fantasy generate significantly more revenue than many other genres, but they are not different vs. each other.
+
+
+##### Sci-Fi vs. All
+<img src="Images/hypotheses/revenue-by-genre_tukeys_Sci-Fi.png" width=800px>
+
+
+##### Fantasy vs. All
+<img src="Images/hypotheses/revenue-by-genre_tukeys_Fantasy.png" width=800px>
+
+
+##### Action vs. All
+Finally, action is the next most highest earning genre that is statistically significant vs the other genres, except for 
+
+<img src="Images/hypotheses/revenue-by-genre_tukeys_Action.png" width=800px>
+
+
+
+
+We can see that Adventure and Action movies generate significantly more revenue than all others (but are not different vs. each other). 
+
+### Final Interpretation
+
+>- According to the post-hoc Tukey's tests, there are many gnere differneces in average revenue, but the 5 significantly more successful genres were: Animation, Adventure, Sci-Fi, Fantasy, and Action.
+
+## Hypothesis Testing Summary &  Recommendations
+
+Our recommendations for how to produce a successful move, nased on the results of our hypothesis tests are the following:
+
+1) MPAA-Rating/Certification:  Make a movie that is rated either "PG" or "PG-13" (definitely not "R")!
+2) Runtime: Make a movie that is longer than 2 hours.
+3) Release Year: Average Revenue in the post-COVID years has not significantly changed vs. pre-pandemic. If you were waiting due to fears about covid-related lost revenue, stop waiting and start making movies!
+4) Genres: Make a movie in the following genres:
+    1.  Animation
+    2.  Adventure
+    3.  Sci-Fi
+    4.  Fantasy
+
+___
+
+## TO DO: Update Remaining Machine-Learning Modeling and Related Insights:
+___
+
+- Update the machine learning analysis to get fresh results with the full 2024 dataset.
 
 ## `Part 5 - Regression Model-Based Insights` - WIP
+
+>Note: Previous Results with smaller dataset are below.
 
 - Finally I will use Linear Regression and other machine learning models to predict movie revenue / ROI to extract insights and recommendations on what features of a movie are positive/negative predictors of success.
 
@@ -270,7 +792,7 @@ strong multicollinearity problems or that the design matrix is singular.
 
 <img src="Images/OLS_best_linear_reg.png">
 
-## Regression Model Coefiicents and Importances
+## Model Coefiicents and Importances
 
 ### OLS Coefficients
 
@@ -283,20 +805,7 @@ strong multicollinearity problems or that the design matrix is singular.
 <img src="Images/permutation_importance.png" width=60%>
 
 
-## `Part 6 - Classification Model-Based Insights` - WIP
-
-
-### Random Forest Classifier - BuiltIn Feature  Importances
-<img src="./Images/rf_clf_importance.png">
-
-### Random Forest Classifier -  Permutation Improtances
-
-<img src="./Images/clf_permutation_importance.png">
-
-### Random Forest - SHAP Summary Plot
-<img src="./Images/rf_shap_summary.png">
-
-### Summary
+### Model-Based-Insights Summary
 
 In this project, I have processed, analyzed, and modeled a large dataset of movie data from IMDB and TMDB. I identified several statistically significant relationships between movie attributes and both revenue and user ratings.
 
@@ -304,7 +813,8 @@ In this project, I have processed, analyzed, and modeled a large dataset of movi
 Here are some of the key insights gained from this analysis:
 
 * MPAA rating significantly impacts movie revenue. R-rated movies tend to generate less revenue than G, PG, or PG-13 rated movies.
-* Movie runtime also significantly impacts revenue. Movies over 2.5 hours tend to generate more revenue than shorter movies.
+* Movie runtime also significantly impacts revenue. Movies over 2 hours tend to generate more revenue than shorter movies.
+  
 * Movie budget is a significant predictor of revenue, but the relationship is not linear. Movies with budgets between \$50 million and \$150 million tend to generate the most revenue.
 * Movie release month and day have a small but statistically significant impact on revenue. Summer-released movies tend to generate more revenue than movies released in other seasons.
 * Production companies involved in making a movie can also significantly impact revenue. Movies produced by certain companies, such as DreamWorks Animation and Pixar, tend to generate more revenue than movies produced by other companies.
@@ -313,8 +823,3 @@ These insights can be used by movie studios and distributors to make informed de
 
 
 In addition to these insights, I have also developed a regression model that can be used to predict the revenue of a movie based on its attributes. This model can be used by studios and distributors to estimate the potential revenue of a movie before it is released.
-
-
-Overall, this project has shown that there is a wealth of information that can be extracted from movie data. This information can be used to make informed decisions about how to make and market movies, and to predict the success of movies before they are released.
-
-

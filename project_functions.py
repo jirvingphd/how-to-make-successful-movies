@@ -226,19 +226,22 @@ def remove_and_display_outliers(groups, as_markdown=True):
         outliers = np.abs(stats.zscore(data)) > 3
 
         
-        outlier_results.append({'group':group_name,
-                               'n (original)': len(data),
-                               '# outliers': outliers.sum(),
-                               "% outliers":f"{outliers.sum()/len(outliers)*100: .2f}%"
-                               })
+
         # print(f"There were {} ({outliers.sum()/len(outliers)*100:.2f}%) outliers in the {sector} group.")
     
         group_data = data.loc[~outliers]
         groups_cleaned[group_name] = group_data
 
-        # Formatting results
-        results_df = pd.DataFrame(outlier_results)
-        results_df = results_df.sort_values('group', ascending=True)
+        outlier_results.append({'group':group_name,
+                               'n (original)': len(data),
+                               '# outliers': outliers.sum(),
+                               "% outliers":f"{outliers.sum()/len(outliers)*100: .2f}%",
+                                "n (final)": len(group_data)
+                               })
+        
+    # Formatting results
+    results_df = pd.DataFrame(outlier_results)
+    results_df = results_df.sort_values('group', ascending=True)
         
     if as_markdown == True:
         results_df = results_df.to_markdown(index=False)   
