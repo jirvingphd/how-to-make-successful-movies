@@ -1,6 +1,305 @@
 import os, json, requests
 
 
+import pandas as pd
+
+import scipy.stats as stats
+import pandas as pd
+import numpy as np
+
+
+def Cohen_d(group1, group2, correction = False):
+    """Compute Cohen's d
+    d = (group1.mean()-group2.mean())/pool_variance.
+    pooled_variance= (n1 * var1 + n2 * var2) / (n1 + n2)
+
+    Args:
+        group1 (Series or NumPy array): group 1 for calculating d
+        group2 (Series or NumPy array): group 2 for calculating d
+        correction (bool): Apply equation correction if N<50. Default is False. 
+            - Url with small ncorrection equation: 
+                - https://www.statisticshowto.datasciencecentral.com/cohens-d/ 
+    Returns:
+        d (float): calculated d value
+         
+    INTERPRETATION OF COHEN's D: 
+    > Small effect = 0.2
+    > Medium Effect = 0.5
+    > Large Effect = 0.8
+    
+    """
+    import scipy.stats as stats
+    import scipy   
+    import numpy as np
+    N = len(group1)+len(group2)
+    diff = group1.mean() - group2.mean()
+
+    n1, n2 = len(group1), len(group2)
+    var1 = group1.var()
+    var2 = group2.var()
+
+    # Calculate the pooled threshold as shown earlier
+    pooled_var = (n1 * var1 + n2 * var2) / (n1 + n2)
+    
+    # Calculate Cohen's d statistic
+    d = diff / np.sqrt(pooled_var)
+    
+    ## Apply correction if needed
+    if (N < 50) & (correction==True):
+        d=d * ((N-3)/(N-2.25))*np.sqrt((N-2)/N)
+    return d
+
+
+#Your code here
+def find_outliers_Z(data):
+    """Use scipy to calculate absolute Z-scores 
+    and return boolean series where True indicates it is an outlier.
+
+    Args:
+        data (Series,or ndarray): data to test for outliers.
+
+    Returns:
+        [boolean Series]: A True/False for each row use to slice outliers.
+        
+    EXAMPLE USE: 
+    >> idx_outs = find_outliers_df(df['AdjustedCompensation'])
+    >> good_data = df[~idx_outs].copy()
+    """
+    import pandas as pd
+    import numpy as np
+    import scipy.stats as stats
+    import pandas as pd
+    import numpy as np
+    ## Calculate z-scores
+    zs = stats.zscore(data)
+    
+    ## Find z-scores >3 awayfrom mean
+    idx_outs = np.abs(zs)>3
+    
+    ## If input was a series, make idx_outs index match
+    if isinstance(data,pd.Series):
+        return pd.Series(idx_outs,index=data.index)
+    else:
+        return pd.Series(idx_outs)
+    
+    
+    
+def find_outliers_IQR(data):
+    """Use Tukey's Method of outlier removal AKA InterQuartile-Range Rule
+    and return boolean series where True indicates it is an outlier.
+    - Calculates the range between the 75% and 25% quartiles
+    - Outliers fall outside upper and lower limits, using a treshold of  1.5*IQR the 75% and 25% quartiles.
+
+    IQR Range Calculation:    
+        res = df.describe()
+        IQR = res['75%'] -  res['25%']
+        lower_limit = res['25%'] - 1.5*IQR
+        upper_limit = res['75%'] + 1.5*IQR
+
+    Args:
+        data (Series,or ndarray): data to test for outliers.
+
+    Returns:
+        [boolean Series]: A True/False for each row use to slice outliers.
+        
+    EXAMPLE USE: 
+    >> idx_outs = find_outliers_df(df['AdjustedCompensation'])
+    >> good_data = df[~idx_outs].copy()
+    
+    """
+    df_b=data
+    res= df_b.describe()
+
+    IQR = res['75%'] -  res['25%']
+    lower_limit = res['25%'] - 1.5*IQR
+    upper_limit = res['75%'] + 1.5*IQR
+
+    idx_outs = (df_b>upper_limit) | (df_b<lower_limit)
+
+    return idx_outs
+    
+
+def simulate_tukeys_results(groups, result):
+    """Construct a tukeys-results-like table for a dictionary containing 2-groups"""
+    results_to_annotate =  {}
+    for i, group in enumerate(groups.keys()):
+        results_to_annotate[f"group{i+1}"] = group
+        
+    results_to_annotate['p-adj'] = result.pvalue
+    results_to_annotate['reject'] = result.pvalue <.05
+    results_to_annotate_df = pd.DataFrame(results_to_annotate, index=[0])
+    return results_to_annotate_df
+
+
+
+def prep_data_for_tukeys(data, group_col = 'group', values_col = 'data'):
+    """Accepts a dictionary with group names as the keys 
+    and pandas series as the values. 
+    
+    Returns a dataframe ready for tukeys test:
+    - with a 'data' column and a 'group' column for sms.stats.multicomp.pairwise_tukeyhsd 
+    
+    Example Use:
+    df_tukey = prep_data_for_tukeys(grp_data)
+    tukey = sms.stats.multicomp.pairwise_tukeyhsd(df_tukey['data'], df_tukey['group'])
+    tukey.summary()
+    """
+    
+    df_tukey = pd.DataFrame(columns=[values_col, group_col])
+    for k,v in  data.items():
+        grp_df = v.rename(values_col).to_frame() 
+        grp_df[group_col] = k
+        df_tukey=pd.concat([df_tukey, grp_df],axis=0)
+
+	## New lines added to ensure compatibility with tukey's test
+    df_tukey[group_col] = df_tukey[group_col].astype('str')
+    df_tukey[values_col] = df_tukey[values_col].astype('float')
+    return df_tukey
+
+
+def check_assumptions_normality(groups_dict, alpha=.05, as_markdown=False):
+    """
+    The Shapiro-Wilk test tests the null hypothesis that the
+    data was drawn from a normal distribution.
+    """
+    import pandas as pd
+    from scipy import stats
+    ## Running normal test on each group and confirming there are >20 in each group
+    results = []
+    for group_name, group_data in groups_dict.items():
+        try:
+            stat, p = stats.shapiro(group_data)
+            test_name = 'Shapiro-Wilk (Normality)'
+        except:
+            print(f'[!] Error with {group_name}')
+            p = np.nan
+            
+        ## save the p val, test statistic, and the size of the group
+        results.append({'stat test':test_name, 'group':group_name, 
+                        'n': len(group_data),
+                         'stat':f"{stat:.5f}",
+                        'p':p,#f"{p:.10f}",
+                        'p (.4)':f"{p:.4f}",
+                        'sig?': p<alpha})
+        results_df = pd.DataFrame(results).set_index(['stat test',"group"])
+    if as_markdown == True:
+        results_df = normal_results_to_markdown(results_df, sort_by='group')
+    return results_df
+
+
+# Prepare Normality Resuls as markdown
+def normal_results_to_markdown(normal_results, sort_by='group'):
+    normal_results = normal_results.reset_index()
+    normal_results = normal_results.drop(columns=['stat test'])
+    normal_results.sort_values(by=sort_by)
+    
+    return normal_results.to_markdown(index=False)
+
+
+def add_sig_legend(ax, frame=False, bbox_to_anchor=(1,1), title='Significance Levels', marker='',
+                  color=None, alignment='center'):
+    from matplotlib.lines import Line2D
+    sig_dict= {"***":"p < .001",
+               "**":"p < .01",
+        '*':"p < .05"}
+    
+    legend_elements = []
+    for asts, pval in sig_dict.items():
+        label =  f'{asts:<5}  {pval:>10}'
+        legend_elements.append( Line2D([0], [0], marker=marker, color=color, markerfacecolor='k',linewidth=0, markersize=0, label=label))
+    
+    # Add the legend to the plot
+    ax.legend(handles=legend_elements, #loc='upper right',
+              bbox_to_anchor = bbox_to_anchor,
+              frameon=frame,title=title, alignment=alignment)
+
+
+
+def annotate_tukey_significance(ax, tukey_results, delta_pad_line = 0.06, 
+                                delta_pad_text=0.02, delta_err = 1.05,
+                                linewidth=.75, fontsize=8, legend=True):
+    """
+    Annotate a barplot with Tukey's HSD test significance, ensuring annotations do not overlap.
+
+    Parameters:
+    - ax: The matplotlib axis object containing the barplot.
+    - tukey_results: DataFrame with columns ['group1', 'group2', 'p-adj', 'reject'].
+    - group_order: List of groups in the same order as they appear in the barplot.
+    - delta_pad_line: Proportional padding above each annotation line.
+    - delta_pad_text: Proportional padding above the text relative to its line.
+    - delta_err: Proportional padding for first annotation relative to error bar.
+    - linewidth: Width of the annotation lines.
+    - fontsize: Size of the annotation text.
+    """
+    import pandas as pd
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+    from matplotlib import ticker as mticker
+
+    # Get results as a dataframe
+    if not isinstance(tukey_results, pd.DataFrame):
+        raw_tukey_data = tukey_results._results_table.data
+        tukey_results = pd.DataFrame(raw_tukey_data[1:],columns=raw_tukey_data[0])
+
+
+    # Determine the height of the highest errorbar
+    highest_bar = max([p.get_height() for p in ax.patches])
+    highest_errorbar = highest_bar * delta_err#1.1  # Assuming errorbar might add 10% height, adjust this based on your error calculation
+    
+        
+    # Determine the initial y-axis height to start the annotations
+    initial_y_max = highest_errorbar#ax.get_ylim()[1]
+    y_max = initial_y_max * delta_err#1.1
+    ax.set_ylim(top=y_max)
+    
+    # Fixed distance above the last annotation for the next one
+    delta = initial_y_max * delta_pad_line#0.06  # Adjust this value based on your plot's scale
+    
+    # Variable to keep track of the last annotation's height
+    last_annotation_height = y_max
+
+    # Extract group order from x-axis labels
+    group_order = [tick.get_text() for tick in ax.get_xticklabels()]
+    
+    # Iterate through Tukey's test results
+    for _, row in tukey_results.iterrows():
+        if row['reject']:  # If the result is significant
+            # Find the positions of the groups on the x-axis
+            group1_pos = group_order.index(row['group1'])
+            group2_pos = group_order.index(row['group2'])
+            x_mid = (group1_pos + group2_pos) / 2  # Midpoint for the annotation
+
+            # Determine significance level for annotation
+            if row['p-adj'] < 0.001:
+                sig = '***'
+            elif row['p-adj'] < 0.01:
+                sig = '**'
+            elif row['p-adj'] < 0.05:
+                sig = '*'
+            else:
+                sig = ''  # No asterisks for non-significant differences
+            
+            # Calculate the height for the annotation, ensuring it's above the last one
+            y = last_annotation_height + delta  # Increment from last height
+            
+            # Draw the line and the annotation
+            ax.plot([group1_pos, group2_pos], [y, y], lw=linewidth, color='black')
+            ax.text(x_mid, y + (delta * delta_pad_text), sig, ha='center', va='bottom', fontweight='semibold',fontsize=fontsize)  # Slightly above the line
+            
+            # Update the last_annotation_height to the current y position
+            # last_annotation_height = y
+            last_annotation_height += delta + (delta * delta_pad_text)
+
+
+    # Adjust the plot's ylim to accommodate the last annotation
+    ax.set_ylim(top=last_annotation_height + delta)
+
+    if legend:
+        add_sig_legend(ax)
+        
+
+
+
 
 def annotate_bars(ax,fmt='.2f',size=15,xytext=(0,8),ha='center', va='center',
                   convert_millions=False, despine=False, spines = ['right','top'],
@@ -88,31 +387,35 @@ def get_line_data(ax,just_error_heights=False):
 		return upper_list
 
         
-def savefig(fname,fig=None, ax=None,dpi=300,bbox_inches='tight',
+def savefig(fname,fig=None, ax=None,dpi=300, bbox_inches='tight',
             facecolor='auto' ,verbose=True):
-	"""Saves matplotlib fig using either fig or ax for plot to save.
-
-	Args:
-		fname (str): image filename (ending with extension  (e.g. .png))
-		fig (matplotlib Figure, optional): figure object to save. Defaults to None.
-		ax (mayplotlib Axes), optional): ax of of figure object to save. Defaults to None.
-		dpi (int, optional): pixel density. Defaults to 300.
-		bbox_inches (str, optional): corrects cutoff labels. Defaults to 'tight'.
-		facecolor (str, optional): control figure facecolor. Defaults to 'auto'.
-		verbose (bool, optional): Print filepath of saved iamge. Defaults to True.
-
-	Raises:
-		Exception: If BOTH fig and ax are passed OR neither fig or ax are passed.
-	"""
-	if ((fig==None) & (ax==None)) |((fig!=None) & (ax!=None)) :
-		raise Exception("Must provide EITHER fig or AX")
-		
-	if fig is None:
-		fig = ax.get_figure()
-
-	fig.savefig(fname,dpi=dpi,bbox_inches=bbox_inches,facecolor=facecolor )
-	if verbose:
-		print(f'- Figure saved as {fname}')
+    """Saves matplotlib fig using either fig or ax for plot to save.
+    
+    Args:
+        fname (str): image filename (ending with extension  (e.g. .png))
+        fig (matplotlib Figure, optional): figure object to save. Defaults to None.
+        ax (mayplotlib Axes), optional): ax of of figure object to save. Defaults to None.
+        dpi (int, optional): pixel density. Defaults to 300.
+        bbox_inches (str, optional): corrects cutoff labels. Defaults to 'tight'.
+        facecolor (str, optional): control figure facecolor. Defaults to 'auto'.
+        verbose (bool, optional): Print filepath of saved iamge. Defaults to True.
+    
+    Raises:
+        Exception: If BOTH fig and ax are passed OR neither fig or ax are passed.
+    """
+    import os
+    dir = os.path.dirname(fname)
+    os.makedirs(dir, exist_ok=True)
+    
+    if ((fig==None) & (ax==None)) |((fig!=None) & (ax!=None)) :
+        raise Exception("Must provide EITHER fig or AX")
+        
+    if fig is None:
+        fig = ax.get_figure()
+    
+    fig.savefig(fname,dpi=dpi,bbox_inches=bbox_inches,facecolor=facecolor )
+    if verbose:
+        print(f'- Figure saved as {fname}')
 
 
 
