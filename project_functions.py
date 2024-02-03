@@ -299,6 +299,24 @@ def annotate_tukey_significance(ax, tukey_results, delta_pad_line = 0.06,
         
 
 
+def plot_simultaneous_comparison( tukeys_results, compare_group = None,compare_color='blue', figsize=(10,10), ):
+    """Plot a tukey's result plot_simultaneous with option to use "compare_group" to selectively color the group blue.
+    Any significantly different groups will appear in red.
+    If compare_group is not none, the name of the group is also annotated in blue.
+    """
+    import matplotlib.pyplot as plt
+    fig, ax = plt.subplots(figsize=figsize)
+    tukeys_results.plot_simultaneous(ylabel="Genre", xlabel="Group Distributions",ax=ax, comparison_name=compare_group);
+    if compare_group is not None:
+        
+        ax.set_title(f"Tukey Pairwise Multiple Comparison Results ({compare_group} vs All)");
+        # Highlighting the specified group
+        for label in ax.get_yticklabels():
+            if label.get_text() == compare_group:
+                label.set_color(compare_color)  # Change color to red for the compare_group
+
+    return fig, ax
+
 
 
 def annotate_bars(ax,fmt='.2f',size=15,xytext=(0,8),ha='center', va='center',
