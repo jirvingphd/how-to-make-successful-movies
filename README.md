@@ -32,10 +32,10 @@ I will use a combination of machine-learning-model-based insights and hypothesis
 <hr>
 
 ### Companion Tableau Dashboard
-<center><a href="https://public.tableau.com/views/MovieDashboard_17068360838980/Home?:language=en-US&:display_count=n&:origin=viz_share_link" target="_blank"><img src="Images/apps/tableau-dash-main.png" width=600></a></center>
 
+<center><a href="https://public.tableau.com/views/MovieDashboard_17068360838980/Main?:language=en-US&:display_count=n&:origin=viz_share_link"><img src="Images/apps/tableau-dash-main.png" width=600></a></center>
 
-<blockquote><a href="https://public.tableau.com/views/MovieDashboard_17068360838980/Home?:language=en-US&publish=yes&:display_count=n&:origin=viz_share_link" target="_blank">Click here for the Companion Tableau Dashboard</a></blockquote>
+<blockquote><a href="https://public.tableau.com/views/MovieDashboard_17068360838980/Main?:language=en-US&:display_count=n&:origin=viz_share_link">Click here for the Companion Tableau Dashboard</a></blockquote>
 
 <hr>
 
