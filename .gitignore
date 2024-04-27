@@ -152,3 +152,4 @@ cython_debug/
 #.idea/
 .DS_Store
 tmdb_api_errors.json
+Data-SQL/movies-db.sql
