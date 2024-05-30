@@ -186,7 +186,7 @@ WHERE
 |  4 | tt0338013 | Eternal Sunshine of the Spotless Mind                  | 2004-03-19     | R               |       108 |  20000000 |  72258126 |
 
 
-### Query 2) Movie Certification, Runties, budget, revenue, and metadat
+### Query 2) Movie Certification, Runties, budget, revenue, and metadata
 
 
 
@@ -308,7 +308,7 @@ If we meet all of the assumptions, we can use
     - `statsmodels.stats.multicomp.pairwise_tukeyhsd`
     
 
-## Q1: # Q1: Does MPAA rating affec average revenue?
+## Q1: # Q1: Does MPAA rating affect average revenue?
 
 ### Hypothesis
 - $H_0$ (Null Hypothesis): All MPAA ratings generate have equal average revenue. 
@@ -388,7 +388,7 @@ group1 group2     meandiff    p-adj       lower           upper      reject
 ### Final Interpretation
 
 >- According to the post-hoc Tukey's tests, G/PG/PG-13 movies make similar average revenue than all other ratings. However, PG movies make more money than PG-13.
->- R-rated movied make significantly less revenue than every other genre!
+>- R-rated movies make significantly less revenue than every other genre!
 
 
 <img src="Images/hypotheses/revnue_mpaa_rating.png" >
