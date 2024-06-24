@@ -7,9 +7,7 @@
 
 <blockquote>
     <ul>
-  <li><a href="https://www.linkedin.com/in/james-irving-phd" rel="nofollow noreferrer">
-    <img src="https://i.stack.imgur.com/gVE0j.png" alt="linkedin"> LinkedIn
-  </a> </li>
+  <li><a href="https://www.linkedin.com/in/james-irving-phd" rel="nofollow noreferrer"> LinkedIn </a> </li>
   <li><a href="https://github.com/jirvingphd" rel="nofollow noreferrer">
     Github
   </a></li>
